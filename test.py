@@ -36,16 +36,29 @@ class Cache:
             print("Element not found")
             return None
                 
-            
-                
-            
 
+class RR:
+    def __init__(self, id, name, infoType, val, ttl, static):
+        self.id = id
+        self.name = name
+        self.infoType = infoType
+        self.val = val
+        self.ttl = ttl
+        self.static = static
+        self.list = [id, name, infoType, val, ttl, static]
+
+    
+    def printAll(self):
+        print(self.list)
+            
+'''
 test = Cache(5)
 test.pushCache(1)
 test.pushCache(2)
 test.pushCache(3)
 test.pushCache(4)
 test.pushCache(5)
+'''
 
 '''
 if test.searchCache(3):
@@ -53,7 +66,7 @@ if test.searchCache(3):
 else:
     print("Not found")
 '''
-
+    
             
         
 

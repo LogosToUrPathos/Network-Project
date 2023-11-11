@@ -3,6 +3,7 @@ from pickle import *
 from test import *
 
 
+
 # LocalServer Info
 localPort = 15000
 serverSocket = socket(AF_INET, SOCK_DGRAM)
@@ -11,7 +12,7 @@ serverSocket.bind(('', localPort))
 #Qualcomm Server info
 qualPort = 21000
 qualSocket = socket(AF_INET, SOCK_DGRAM)
-qualSocket.bind(('', qualPort))
+#qualSocket.bind(('', qualPort))
 
 
 #ViaSat Server info
@@ -27,14 +28,7 @@ information about the query
 '''
 
 # initialize Resource Record object 
-class RR:
-    def __init__(self, rnum, dname, ip, val, ttl, static):
-        self.rnum = rnum
-        self.dname = dname
-        self.ip = ip
-        self.val = val
-        self.ttl = ttl
-        self.static = static
+
 
 # create Cache obj
 localCache = Cache(100)
