@@ -6,11 +6,17 @@ class Cache:
         self.cache = []  #declare cache data member
         
 
-    def searchCache(self, query):
+    def getCache(self, query):
         if query in self.cache:
             return self.cache[query]
         else:
             return None
+        
+    def searchCache(self, query):
+        if query in self.cache:
+            return True
+        else:
+            return False
         
     def pushCache(self, val):
         if(len(self.cache) >= self.capacity):
@@ -40,13 +46,13 @@ test.pushCache(2)
 test.pushCache(3)
 test.pushCache(4)
 test.pushCache(5)
-test.pushCache(6)
 
-test.delCache(5)
-test.pushCache(6)
-
-print(test.cache)
-
+'''
+if test.searchCache(3):
+    print("Found")
+else:
+    print("Not found")
+'''
 
             
         
