@@ -31,9 +31,17 @@ information about the query
 
 
 # create Cache obj
-localCache = Cache(100)
+localCache = Cache(10)
 
-localCache.pushCache("princeton")
+#localCache.pushCache("princeton")
+
+
+localCache.pushCache(RR(1, "www.csusm.edu", 'A', "144.37.5.45", 60, 1))
+localCache.pushCache(RR(2, "cc.csusm.edu", 'A', "144.37.5.117", 60, 1))
+localCache.pushCache(RR(3, "cc1.csusm.edu", 'CNAME', "cc.csusm.edu", 60, 1))
+localCache.pushCache(RR(4, "cc1.csusm.edu", 'A', "144.37.5.118", 60, 1))
+localCache.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", 60, 1))
+localCache.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
 
 
 
@@ -45,23 +53,25 @@ while 1:
     
     msg, clientADDR = serverSocket.recvfrom(2048)
     modMsg = msg.decode()
-    response = "jeez"
+    print("modMsg is... : ", modMsg)
+    response = localCache.searchName(modMsg)
+    print("Response is: ", response)
 
-    if(localCache.searchCache(modMsg)):  # search query in cache
-        response = modMsg
+    if(response != -1):  # search query in cache
+        response = localCache.searchName(modMsg)
     else:
         #  query wasn't in cache; Ask qualComm server
         response = "PLACEHOLDER"
 
         # send query to qualComm  
-        qualSocket.sendto(msg, ('localhost', qualPort))
+        #qualSocket.sendto(msg, ('localhost', qualPort))
 
         # wait for qualComm response
-        qualResponse, qualAddress = qualSocket.recvfrom(2048)
-        response = qualResponse
+        #qualResponse, qualAddress = qualSocket.recvfrom(2048)
+        #response = qualResponse
         
 
-        qualSocket.close()
+        #qualSocket.close()
 
 
 

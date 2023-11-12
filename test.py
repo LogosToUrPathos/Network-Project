@@ -4,7 +4,21 @@ class Cache:
     def __init__(self, capacity):
         self.capacity = capacity
         self.cache = []  #declare cache data member
+        self.index = -1
         
+    def searchName(self, query):
+        i = 0
+        while i < len(self.cache):
+            if self.cache[i].name == query:
+                return self.cache[i].val
+                #return True
+            else: 
+                i += 1
+
+        print("No RR by that name")
+        return -1
+            
+
 
     def getCache(self, query):
         if query in self.cache:
@@ -25,12 +39,14 @@ class Cache:
             return None
         else:
             self.cache.append(val)
+            self.index += 1
 
     def delCache(self, val):
         
         if val in self.cache:
 
             self.cache.remove(val)
+            self.index -= 1
             
         else:
             print("Element not found")
@@ -50,7 +66,52 @@ class RR:
     
     def printAll(self):
         print(self.list)
-            
+
+
+'''           
+test = Cache(10)
+
+test.pushCache(RR(1, "www.csusm.edu", 'A', "144.37.5.45", 60, 1))
+test.pushCache(RR(2, "cc.csusm.edu", 'A', "144.37.5.117", 60, 1))
+test.pushCache(RR(3, "cc1.csusm.edu", 'CNAME', "cc.csusm.edu", 60, 1))
+test.pushCache(RR(4, "cc1.csusm.edu", 'A', "144.37.5.118", 60, 1))
+test.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", 60, 1))
+test.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
+
+testName = test.searchName("my.csusm.edu")
+if(testName != -1):
+    print(testName)
+else:
+    print("It's -1")
+'''
+
+
+
+
+
+
+
+
+#test = Cache(5)
+#test.pushCache(RR(2, "cc.csusm.edu", 'A', "144.37.5.117", 60, 1))
+#test.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
+
+#testSearch = test.searchName("qualcomm.com")
+#if(testSearch != -1):
+#    print(testSearch)
+#else:
+#    print("testSearch has failed")
+
+
+'''
+nameTest = "qualcomm.com"
+if(test.searchName("qualcomm.com")):
+    print(nameTest)
+    print("SUCCESS")
+else:
+    print("FAILED")
+'''
+
 '''
 test = Cache(5)
 test.pushCache(1)
