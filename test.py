@@ -17,7 +17,19 @@ class Cache:
 
         print("No RR by that name")
         return -1
-            
+    
+    def returnObject(self, query):
+        i = 0
+        while i < len(self.cache):
+            if self.cache[i].name == query:
+                return self.cache[i]  # returns entire object this time
+                
+            else: 
+                i += 1
+
+        print("No Object by that Name")
+        return -1
+        
 
 
     def getCache(self, query):
@@ -68,7 +80,11 @@ class RR:
         print(self.list)
 
 
-'''           
+
+
+
+
+#'''           
 test = Cache(10)
 
 test.pushCache(RR(1, "www.csusm.edu", 'A', "144.37.5.45", 60, 1))
@@ -78,12 +94,15 @@ test.pushCache(RR(4, "cc1.csusm.edu", 'A', "144.37.5.118", 60, 1))
 test.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", 60, 1))
 test.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
 
-testName = test.searchName("my.csusm.edu")
+'''
+testName = test.returnObject("my.csusm.edu")
 if(testName != -1):
-    print(testName)
+    print(testName.val)
 else:
     print("It's -1")
 '''
+
+#'''
 
 
 

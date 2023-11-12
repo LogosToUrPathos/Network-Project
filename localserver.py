@@ -53,29 +53,31 @@ while 1:
     
     msg, clientADDR = serverSocket.recvfrom(2048)
     modMsg = msg.decode()
-    print("modMsg is... : ", modMsg)
+
+    #print("modMsg is... : ", modMsg)
     response = localCache.searchName(modMsg)
-    print("Response is: ", response)
+    #print("Response is: ", response)
 
     if(response != -1):  # search query in cache
-        response = localCache.searchName(modMsg)
+        response = localCache.searchName(modMsg)  #before this used 'searchName'
     else:
         #  query wasn't in cache; Ask qualComm server
         response = "PLACEHOLDER"
 
         # send query to qualComm  
-        #qualSocket.sendto(msg, ('localhost', qualPort))
+        qualSocket.sendto(msg, ('localhost', qualPort))
 
         # wait for qualComm response
-        #qualResponse, qualAddress = qualSocket.recvfrom(2048)
-        #response = qualResponse
+        qualResponse, qualAddress = qualSocket.recvfrom(2048)
+        response = qualResponse.decode()
         
 
-        #qualSocket.close()
+        qualSocket.close()
 
 
 
 
+    
     serverSocket.sendto(response.encode(), clientADDR)
     
 

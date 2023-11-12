@@ -9,12 +9,9 @@ qualSocket = socket(AF_INET, SOCK_DGRAM)
 qualSocket.bind(('', qualPort))
 
 qualCache = Cache(10)
-rr1 = RR(1, "www.qualcomm.com", 'A', "104.86.224.205", 60, 1)
 
-rr2 = RR(2, "qtiack12.qti.qualcomm.com",'A', "129.49.100.21", 60, 1)
-
-qualCache.pushCache(rr1)
-qualCache.pushCache(rr2)
+qualCache.pushCache(RR(1, "www.qualcomm.com", 'A', "104.86.224.205", 60, 1))
+qualCache.pushCache(RR(2, "qtiack12.qti.qualcomm.com",'A', "129.49.100.21", 60, 1))
 
 #rr2.printAll()
 
@@ -25,13 +22,14 @@ while 1:
     modQualMsg = qualMsg.decode()
     response = "qualcomm jeez"
 
-    if(qualCache.searchCache(modQualMsg)):
+    qualSearch = qualCache.searchName(modQualMsg)
+    if(qualSearch != -1):
         #response = qualCache.getCache(modQualMsg)
-        response = "Inside qualcomm RR"
+        response = qualSearch
     else:
-        response = "QUALCOMM PLACEHOLDER"
+        response = "NOT IN QUALCOMM"
 
-    qualSocket.sendto(localAddr)
+    qualSocket.sendto(response.encode(), localAddr)
     
 
 
