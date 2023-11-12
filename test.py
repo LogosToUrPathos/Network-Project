@@ -17,7 +17,24 @@ class Cache:
 
         print("No RR by that name")
         return -1
-    
+
+    #Search based on name and type
+    #Returns whole row
+    def searchQuery(self, url, infType):
+        i = 0
+        while i < len(self.cache):
+            if (self.cache[i].name == url and self.cache[i].infoType == infType):
+                print("Row found!!!!!!!")
+                return self.cache[i]
+                #return True
+            else:
+                i += 1
+
+        print("Not found")
+        return -1
+
+
+
     def returnObject(self, query):
         i = 0
         while i < len(self.cache):
@@ -78,6 +95,7 @@ class RR:
     
     def printAll(self):
         print(self.list)
+
 
 
 

@@ -1,7 +1,7 @@
 from socket import *
 from pickle import *
 from test import *
-
+from time import time
 
 
 # LocalServer Info
@@ -17,7 +17,7 @@ qualSocket = socket(AF_INET, SOCK_DGRAM)
 
 #ViaSat Server info
 viaPort = 22000
-
+viaSocket = socket(AF_INET, SOCK_DGRAM)
 
 
 #DNS chain is Local -> Qualcomm -> Viat
@@ -50,36 +50,71 @@ localCache.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
 print("[Local Server] Ready to receive...")
 # local server shall wait for response through 'recvfrom' and iterate indefinately
 while 1:
-    
+    importantInfo = []
+    #Decode message
     msg, clientADDR = serverSocket.recvfrom(2048)
     modMsg = msg.decode()
 
-    #print("modMsg is... : ", modMsg)
-    response = localCache.searchName(modMsg)
-    #print("Response is: ", response)
+    #get Name and type
+    query = modMsg.split(',')
+
+    #
+    print("modMsg is... : ", query[0])
+    print("typeMsg is... : ", query[1])
+    #response = localCache.searchName(query[0])
+    response = localCache.searchQuery(query[0], query[1])
+
+    #response.printAll()
+    #calculateTtl = time()+60
+    #print(calculateTtl)
+    #response.setTtl()
+    #response.printAll()
+
+    #print("Response is: ", response.name)
 
     if(response != -1):  # search query in cache
-        response = localCache.searchName(modMsg)  #before this used 'searchName'
-    else:
+        print("Found in local server table")
+        importantInfo = [response.name, response.infoType, response.val]
+        #response = localCache.searchName(query[0])  #before this used 'searchName'
+    elif((query[0].find("qualcomm.com")!= -1) and response == -1):
         #  query wasn't in cache; Ask qualComm server
-        response = "PLACEHOLDER"
+        #response = "PLACEHOLDER"
 
         # send query to qualComm  
         qualSocket.sendto(msg, ('localhost', qualPort))
 
-        # wait for qualComm response
-        qualResponse, qualAddress = qualSocket.recvfrom(2048)
-        response = qualResponse.decode()
-        
+        # wait for viasat response
+        for i in range(0, 3):
+            qualResponse, qualAddress = qualSocket.recvfrom(2048)
+            # response = viaResponse.decode()
+            importantInfo.append(qualResponse.decode())
 
         qualSocket.close()
 
+        #query wasn't in qualcom ask csusm
+    elif ((query[0].find("viasat.com") != -1) and response == -1):
+        print("CSUSM server found")
+        viaSocket.sendto(msg, ('localhost', viaPort))
 
+        # wait for viasat response
+        for i in range(0, 3):
+            viaResponse, viaAddress = viaSocket.recvfrom(2048)
+            #response = viaResponse.decode()
+            importantInfo.append(viaResponse.decode())
+        #response.printAll()
+        print(importantInfo)
+        viaSocket.close()
 
+        #EROR not found at all
+    else:
+        print("ERROR ERROR ERROR")
 
-    
-    serverSocket.sendto(response.encode(), clientADDR)
-    
+    #serverSocket.sendto(response.encode(), clientADDR)
+
+    # no encode method for RR so take only the most important info
+
+    for i in range(0, 3):
+        serverSocket.sendto(importantInfo[i].encode(), clientADDR)
 
     
 
