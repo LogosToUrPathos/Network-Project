@@ -17,7 +17,24 @@ class Cache:
 
         print("No RR by that name")
         return -1
-    
+
+    #Search based on name and type
+    #Returns whole row
+    def searchQuery(self, url, infType):
+        i = 0
+        while i < len(self.cache):
+            if (self.cache[i].name == url and self.cache[i].infoType == infType):
+                print("Query was found in the table!")
+                return self.cache[i]
+                #return True
+            else:
+                i += 1
+
+        print("Query not found in the table")
+        return -1
+
+
+
     def returnObject(self, query):
         i = 0
         while i < len(self.cache):
@@ -63,6 +80,11 @@ class Cache:
         else:
             print("Element not found")
             return None
+        
+    def printCache(self):
+        for i in self.cache:
+            print(f"ID: {i.id}, Name: {i.name}, Type: {i.infoType}, Value: {i.val}"
+            f", TTL:{i.ttl}, Static: {i.static}")
                 
 
 class RR:
@@ -79,6 +101,12 @@ class RR:
     def printAll(self):
         print(self.list)
 
+    def assembleRR(newID,importantInfoList, newTtl):
+        #current highest ID + 1 for a new entry ID
+        newID += 1
+        return RR(newID, importantInfoList[0], importantInfoList[1],importantInfoList[2], newTtl,0)
+
+
 
 
 
@@ -87,12 +115,12 @@ class RR:
 #'''           
 test = Cache(10)
 
-test.pushCache(RR(1, "www.csusm.edu", 'A', "144.37.5.45", 60, 1))
-test.pushCache(RR(2, "cc.csusm.edu", 'A', "144.37.5.117", 60, 1))
-test.pushCache(RR(3, "cc1.csusm.edu", 'CNAME', "cc.csusm.edu", 60, 1))
-test.pushCache(RR(4, "cc1.csusm.edu", 'A', "144.37.5.118", 60, 1))
-test.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", 60, 1))
-test.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", 60, 1))
+test.pushCache(RR(1, "www.csusm.edu", 'A', "144.37.5.45", "", 1))
+test.pushCache(RR(2, "cc.csusm.edu", 'A', "144.37.5.117", "", 1))
+test.pushCache(RR(3, "cc1.csusm.edu", 'CNAME', "cc.csusm.edu", "", 1))
+test.pushCache(RR(4, "cc1.csusm.edu", 'A', "144.37.5.118", "", 1))
+test.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", "", 1))
+test.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", "", 1))
 
 '''
 testName = test.returnObject("my.csusm.edu")

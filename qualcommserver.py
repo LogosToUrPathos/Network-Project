@@ -10,8 +10,8 @@ qualSocket.bind(('', qualPort))
 
 qualCache = Cache(10)
 
-qualCache.pushCache(RR(1, "www.qualcomm.com", 'A', "104.86.224.205", 60, 1))
-qualCache.pushCache(RR(2, "qtiack12.qti.qualcomm.com",'A', "129.49.100.21", 60, 1))
+qualCache.pushCache(RR(1, "www.qualcomm.com", 'A', "104.86.224.205", "", 1))
+qualCache.pushCache(RR(2, "qtiack12.qti.qualcomm.com",'A', "129.49.100.21", "", 1))
 
 #rr2.printAll()
 
@@ -20,16 +20,28 @@ print("[QualComm Server] Ready to Receive...")
 while 1:
     qualMsg, localAddr = qualSocket.recvfrom(2048)
     modQualMsg = qualMsg.decode()
-    response = "qualcomm jeez"
+    #response = "qualcomm jeez"
 
-    qualSearch = qualCache.searchName(modQualMsg)
+    # get Name and type
+    qualQuery = modQualMsg.split(',')
+
+    #
+    print("modMsg is... : ", qualQuery[0])
+    print("typeMsg is... : ", qualQuery[1])
+
+
+    qualSearch = qualCache.searchQuery(qualQuery[0], qualQuery[1])
     if(qualSearch != -1):
-        #response = qualCache.getCache(modQualMsg)
+        print("Found in qualcomm server table")
         response = qualSearch
-    else:
-        response = "NOT IN QUALCOMM"
 
-    qualSocket.sendto(response.encode(), localAddr)
-    
+        # no encode method for RR so take only the most important info
+        importantInfo = [response.name, response.infoType, response.val]
+    else:
+        importantInfo = ["Error","from","qualcomm"]
+        #qualSocket.sendto(response.encode(), localAddr)
+
+    for i in range(0, 3):
+        qualSocket.sendto(importantInfo[i].encode(), localAddr)
 
 
