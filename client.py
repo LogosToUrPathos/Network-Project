@@ -13,8 +13,9 @@ serverPort = 15000
 clientCache = Cache(10)
 
 # loop started here
+quitLoop = True
 Cindex = 0
-while 1:
+while quitLoop == True:
     
     clientSock = socket(AF_INET, SOCK_DGRAM)
     Cindex+=1
@@ -85,7 +86,13 @@ while 1:
     print("\nClient RR Table:------------------------------")
 
     clientCache.printCache()
-
     importantInfo.clear()
+
+
+    stuff = input("\n(Continue? Y/n): ")
+    if stuff == "N" or stuff == "n":
+        quitLoop = False
+    
+
 
 clientSock.close()
