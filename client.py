@@ -67,21 +67,26 @@ while quitLoop == True:
 
     if(response != -1):  # search query in cache
             print("Found in client RR table\n")
+            print("Requested IP was in RR: ", response.val)
+
     # send query to local Server
     else:
         clientSock.sendto(msg.encode(), (serverName, serverPort))
 
     # wait for local server response
-    for i in range(0, 4):
-        modMsg, serverADDR = clientSock.recvfrom(2048)
-        importantInfo.append(modMsg.decode())
+        for i in range(0, 4):
+            modMsg, serverADDR = clientSock.recvfrom(2048)
+            importantInfo.append(modMsg.decode())
 
-    print(importantInfo)
+        print(importantInfo)
 
-    rrEntry = RR.assembleRR(rrId, importantInfo, importantInfo[3])
-    clientCache.pushCache(rrEntry)
+        rrEntry = RR.assembleRR(rrId, importantInfo, importantInfo[3])
+        clientCache.pushCache(rrEntry)
 
-    print("Requested IP: ", rrEntry.val)
+        print("Requested IP: ", rrEntry.val)
+
+    
+    
 
     print("\nClient RR Table:------------------------------")
 

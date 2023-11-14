@@ -44,7 +44,7 @@ localCache.pushCache(RR(5, "my.csusm.edu", 'A', "144.37.5.150", "", 1))
 localCache.pushCache(RR(6, "qualcomm.com", "NS", "dns.qualcomm.com", "", 1))
 #localCache.pushCache(RR(7, "gn", 'A', "144.37.5.45", "72", 1))
 
-
+#newId = 6
 
 
 #serverSocket.settimeout(25)
@@ -53,6 +53,7 @@ print("[Local Server] Ready to receive...")
 while 1:
     importantInfo = []
     newId = 0
+    
     #Decode message
     msg, clientADDR = serverSocket.recvfrom(2048)
     modMsg = msg.decode()
@@ -81,6 +82,7 @@ while 1:
         #find highest ID
         if(newId < rr_instance.id):
             newId = rr_instance.id
+        
 
         #while looping check ttl
         if (rr_instance.ttl == ""):
