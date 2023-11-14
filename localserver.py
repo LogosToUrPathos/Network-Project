@@ -134,22 +134,26 @@ while 1:
             #response = viaResponse.decode()
             importantInfo.append(viaResponse.decode())
         #response.printAll()
-        print(importantInfo)
+        #print(importantInfo)
         #viaSocket.close()
+        localCache.pushCache(RR.assembleRR(newId, importantInfo, ttlString))
 
         #EROR not found at all
     else:
         #print("ERROR ERROR ERROR")
         importantInfo = ["Error","unable to capture","requested value"]
 
-    for rr_instance in localCache.cache:
-        print(f"ID: {rr_instance.id}, Name: {rr_instance.name}, Type: {rr_instance.infoType}, Value: {rr_instance.val}"
-              f", TTL:{rr_instance.ttl}, Static: {rr_instance.static}")
+    
+    
 
     importantInfo.append(ttlString)
     # no encode method for RR so take only the most important info
     for i in range(0, 4):
         serverSocket.sendto(importantInfo[i].encode(), clientADDR)
+    
+    print("\t\t\t[TESTING SERVER CACHE]")
+    localCache.printCache()
+    importantInfo.clear()
 
     
 
